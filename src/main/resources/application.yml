@@ -1,0 +1,43 @@
+spring:
+  application:
+    name: zheng-ai-agent
+  profiles:
+    active: local
+  ai:
+    ollama:
+      chat:
+        model: deepseek-r1:7b
+      base-url: http://localhost:11434
+  # DataSource Config
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/ai_agent
+    username: root
+    password: 123456
+# mybatis-plus
+mybatis-plus:
+  configuration:
+    map-underscore-to-camel-case: false
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+# springdoc-openapi
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+    tags-sorter: alpha
+    operations-sorter: alpha
+  api-docs:
+    path: /v3/api-docs
+  group-configs:
+    - group: 'default'
+      paths-to-match: '/**'
+      packages-to-scan: com.zheng.zhengaiagent.controller
+# knife4j???????????????
+knife4j:
+  enable: true
+  setting:
+    language: zh_cn
+server:
+  port: 8123
+  servlet:
+    context-path: /api
