@@ -2,13 +2,17 @@ package com.zheng.zhengaiagent.app;
 
 import com.zheng.zhengaiagent.advisor.MyLoggerAdvisor;
 import com.zheng.zhengaiagent.advisor.MySensitiveWordAdvisor;
-import com.zheng.zhengaiagent.chatmemory.DatabaseChatMemory;
+import com.zheng.zhengaiagent.chatmemory.FileBasedChatMemory;
+import com.zheng.zhengaiagent.rag.LoveAppRagCustomAdvisorFactory;
+import com.zheng.zhengaiagent.rag.QueryReWriter;
+import com.zheng.zhengaiagent.util.translate.LanguageTranslateByBaiDu;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
 import org.springframework.ai.chat.client.advisor.QuestionAnswerAdvisor;
 import org.springframework.ai.chat.client.advisor.api.Advisor;
+import org.springframework.ai.chat.memory.ChatMemory;
 import org.springframework.ai.chat.model.ChatModel;
 import org.springframework.ai.chat.model.ChatResponse;
 import org.springframework.ai.vectorstore.VectorStore;
@@ -72,10 +76,26 @@ public class LoveApp {
             您今天需要哪方面的帮助呢？"
             """;
 
-    /**
+    @Resource
+    private VectorStore pgVectorVectorStore;
+
+    @Resource
+    private QueryReWriter queryReWriter;
+
+    // 支持 RAG 功能的 AI 多轮对话
+    @Resource
+    private VectorStore loveAppVectorStore;
+
+    @Resource
+    private Advisor loveAppRagCloudAdvisor;
+
+    @Resource
+    private LanguageTranslateByBaiDu languageTranslateByBaiDu;
+
+/*    *//**
      * ChatClient初始化
      * @param dashscopeChatModel
-     */
+     *//*
     public LoveApp(ChatModel dashscopeChatModel, DatabaseChatMemory databaseChatMemory){
         // 初始化基于文件的记忆
         String fileDir = System.getProperty("user.dir") + "/temp/chat-memory";
@@ -86,6 +106,30 @@ public class LoveApp {
                 .defaultSystem(SYSTEM_PROMPT)
                 .defaultAdvisors(
                         new MessageChatMemoryAdvisor(databaseChatMemory),
+                        // 自定义日志Advisor，可按需开启
+                        new MyLoggerAdvisor(),
+                        // 自定义敏感词检测Advisor
+                        new MySensitiveWordAdvisor()
+                        // 自定义推理增强Advisor，可按需开启
+//                        new ReReadingAdvisor()
+                )
+                .build();
+    }*/
+
+    /**
+     * ChatClient初始化
+     * @param dashscopeChatModel
+     */
+    public LoveApp(ChatModel dashscopeChatModel){
+        // 初始化基于文件的记忆
+        String fileDir = System.getProperty("user.dir") + "/temp/chat-memory";
+        ChatMemory chatMemory = new FileBasedChatMemory(fileDir);
+        // 初始化基于内存的记忆
+//        ChatMemory chatMemory = new InMemoryChatMemory();
+        chatClient = ChatClient.builder(dashscopeChatModel)
+                .defaultSystem(SYSTEM_PROMPT)
+                .defaultAdvisors(
+                        new MessageChatMemoryAdvisor(chatMemory),
                         // 自定义日志Advisor，可按需开启
                         new MyLoggerAdvisor(),
                         // 自定义敏感词检测Advisor
@@ -135,12 +179,7 @@ public class LoveApp {
         return loveReport;
     }
 
-    // 支持 RAG 功能的 AI 多轮对话
-    @Resource
-    private VectorStore loveAppVectorStore;
 
-    @Resource
-    private Advisor loveAppRagCloudAdvisor;
 
     /**
      * 和 RAG 知识库进行对话
@@ -149,16 +188,22 @@ public class LoveApp {
      * @return
      */
     public String doChatWithRAG(String message, String chatId){
+        String translateMessage = languageTranslateByBaiDu.autoTranslate(message, "zh");
+        String rewrittenMessage = queryReWriter.doQueryRewrite(translateMessage);
         ChatResponse chatResponse = chatClient
                 .prompt()
-                .user(message)
+                .user(rewrittenMessage)
                 .advisors(spec -> spec.param(CHAT_MEMORY_CONVERSATION_ID_KEY, chatId)
                         .param(CHAT_MEMORY_RETRIEVE_SIZE_KEY, 10))
                 .advisors(new MyLoggerAdvisor())
                 // 引用 RAG 知识库问答
-//                .advisors(new QuestionAnswerAdvisor(loveAppVectorStore))
+                .advisors(new QuestionAnswerAdvisor(loveAppVectorStore))
                 // 应用 RAG 检索增强服务 （基于云知识库服务）
-                .advisors(loveAppRagCloudAdvisor)
+//                .advisors(loveAppRagCloudAdvisor)
+                // 应用 RAG 检索增强服务 （基于 PGVector ）
+//                .advisors(new QuestionAnswerAdvisor(pgVectorVectorStore))
+                // 应用自定义的 RAG 检索增强服务(文档查询器 + 上下文增强)
+//                .advisors(LoveAppRagCustomAdvisorFactory.createLoveAppRagCustomAdvisor(loveAppVectorStore, "单身"))
                 .call()
                 .chatResponse();
         String content = chatResponse.getResult().getOutput().getText();

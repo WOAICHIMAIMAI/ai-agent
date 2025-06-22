@@ -1,8 +1,6 @@
 package com.zheng.zhengaiagent.mapper;
 
 
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.zheng.zhengaiagent.domain.entity.ChatMessage;
 
 /**
 * @author ZhengJJ
@@ -10,7 +8,7 @@ import com.zheng.zhengaiagent.domain.entity.ChatMessage;
 * @createDate 2025-06-18 02:28:08
 * @Entity .domain.entity.com.zheng.zhengaiagent.domain.entity.ChatMessage
 */
-public interface ChatMessageMapper extends BaseMapper<ChatMessage> {
+public interface ChatMessageMapper/* extends BaseMapper<ChatMessage>*/ {
 
 }
 

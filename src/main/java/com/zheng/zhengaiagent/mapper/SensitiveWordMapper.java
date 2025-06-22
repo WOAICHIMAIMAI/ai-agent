@@ -1,7 +1,5 @@
 package com.zheng.zhengaiagent.mapper;
 
-import com.zheng.zhengaiagent.domain.entity.SensitiveWord;
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**
 * @author ZhengJJ
@@ -9,7 +7,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 * @createDate 2025-06-18 01:47:08
 * @Entity generator.domain.entity.SensitiveWord
 */
-public interface SensitiveWordMapper extends BaseMapper<SensitiveWord> {
+public interface SensitiveWordMapper/* extends BaseMapper<SensitiveWord>*/ {
 
 }
 

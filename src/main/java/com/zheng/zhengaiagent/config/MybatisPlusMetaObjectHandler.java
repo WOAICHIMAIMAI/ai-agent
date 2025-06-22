@@ -1,12 +1,10 @@
 package com.zheng.zhengaiagent.config;
 
-import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
-import org.apache.ibatis.reflection.MetaObject;
-import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.util.Date;
 
+/*
 @Component
 public class MybatisPlusMetaObjectHandler implements MetaObjectHandler {
     
@@ -23,4 +21,4 @@ public class MybatisPlusMetaObjectHandler implements MetaObjectHandler {
         // 更新时间自动填充
         this.strictUpdateFill(metaObject, "updateTime", LocalDateTime.class, LocalDateTime.now());
     }
-}
+}*/

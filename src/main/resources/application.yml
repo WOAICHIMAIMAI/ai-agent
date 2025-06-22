@@ -8,12 +8,15 @@ spring:
       chat:
         model: deepseek-r1:7b
       base-url: http://localhost:11434
-  # DataSource Config
-  datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/ai_agent
-    username: root
-    password: 123456
+    vectorstore:
+      pgvector:
+        index-type: HNSW
+        dimensions: 1536
+        distance-type: COSINE_DISTANCE
+        max-document-batch-size: 10000 # Optional: Maximum number of documents per batch
+
+
+
 # mybatis-plus
 mybatis-plus:
   configuration:

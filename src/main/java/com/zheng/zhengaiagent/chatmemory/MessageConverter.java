@@ -1,6 +1,5 @@
 package com.zheng.zhengaiagent.chatmemory;
 
-import com.zheng.zhengaiagent.domain.entity.ChatMessage;
 import org.springframework.ai.chat.messages.*;
 
 import java.time.LocalDateTime;
@@ -8,11 +7,14 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+/*
 public class MessageConverter {
 
-    /**
+    */
+/**
      * 将 Message 转换为 ChatMessage
-     */
+     *//*
+
     public static ChatMessage toChatMessage(Message message, String conversationId) {
         return ChatMessage.builder()
                 .conversationId(conversationId)
@@ -22,9 +24,11 @@ public class MessageConverter {
                 .build();
     }
 
-    /**
+    */
+/**
      * 将 ChatMessage 转换为 Message
-     */
+     *//*
+
     public static Message toMessage(ChatMessage chatMessage) {
         MessageType messageType = chatMessage.getMessageType();
         String text = chatMessage.getContent();
@@ -38,3 +42,4 @@ public class MessageConverter {
     }
 
 }
+*/

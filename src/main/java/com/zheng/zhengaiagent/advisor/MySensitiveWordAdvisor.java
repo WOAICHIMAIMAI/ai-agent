@@ -1,7 +1,5 @@
 package com.zheng.zhengaiagent.advisor;
 
-import com.zheng.zhengaiagent.domain.entity.SensitiveWord;
-import com.zheng.zhengaiagent.service.SensitiveWordService;
 import com.zheng.zhengaiagent.util.TrieUtils;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;

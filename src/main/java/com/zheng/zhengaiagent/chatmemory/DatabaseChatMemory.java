@@ -1,7 +1,5 @@
 package com.zheng.zhengaiagent.chatmemory;
 
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.zheng.zhengaiagent.domain.entity.ChatMessage;
 import com.zheng.zhengaiagent.service.ChatMessageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.ai.chat.memory.ChatMemory;
@@ -12,7 +10,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Component
+//@Component
+/*
 @RequiredArgsConstructor
 public class DatabaseChatMemory implements ChatMemory {
 
@@ -56,3 +55,4 @@ public class DatabaseChatMemory implements ChatMemory {
     }
 
 }
+*/
