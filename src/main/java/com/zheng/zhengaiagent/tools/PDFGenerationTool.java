@@ -9,8 +9,10 @@ import com.itextpdf.kernel.pdf.PdfWriter;
 import com.itextpdf.layout.Document;
 import com.itextpdf.layout.element.Paragraph;
 import com.zheng.zhengaiagent.constant.FileConstant;
+import com.zheng.zhengaiagent.properties.AliOssProperties;
 import com.zheng.zhengaiagent.util.AliOSSUtil;
 import jakarta.annotation.Resource;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.tool.annotation.Tool;
 import org.springframework.ai.tool.annotation.ToolParam;
@@ -24,8 +26,14 @@ import java.io.IOException;
  * PDF 生成工具 通过OSS存储
  */
 @Slf4j
+@Component
 public class PDFGenerationTool {
 
+    private AliOSSUtil aliOSSUtil;
+
+    public PDFGenerationTool(AliOssProperties aliOssProperties){
+        aliOSSUtil = new AliOSSUtil(aliOssProperties.getEndpoint(), aliOssProperties.getAccessKeyId(), aliOssProperties.getAccessKeySecret(), aliOssProperties.getBucketName());
+    }
 
     @Tool(description = "Generate a PDF file with given content", returnDirect = true)
     public String generatePDF(
@@ -34,7 +42,8 @@ public class PDFGenerationTool {
         String fileDir = FileConstant.FILE_SAVE_DIR + "/pdf";
         String filePath = fileDir + "/" + fileName;
         String urlPath;
-        AliOSSUtil aliOSSUtil = new AliOSSUtil("https://oss-cn-hangzhou.aliyuncs.com", "LTAI5t6Yxfn6u2az6xpUGqJu", "ZafmIIfoozoggb8erlxPjGAQyqPUWo", "sky-itcast-jiajun");
+        System.out.println(aliOSSUtil);
+        aliOSSUtil = new AliOSSUtil("https://oss-cn-hangzhou.aliyuncs.com", "LTAI5t6Yxfn6u2az6xpUGqJu", "ZafmIIfoozoggb8erlxPjGAQyqPUWo", "sky-itcast-jiajun");
         try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
             // 1. 创建PDF到内存流
             try (PdfWriter writer = new PdfWriter(baos);

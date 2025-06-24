@@ -66,10 +66,10 @@ class LoveAppTest {
 */
 
         // 测试 PDF 生成
-//        testMessage("生成一份‘明日约会计划’PDF，包含餐厅预订、活动流程和礼物清单");
+        testMessage("生成一份‘明日约会计划’PDF，包含餐厅预订、活动流程和礼物清单");
 
         // 测试获取当前时间
-        testMessage("请告知我今天是几号，我有点忘记了");
+//        testMessage("请告知我今天是几号，我有点忘记了");
     }
 
 
