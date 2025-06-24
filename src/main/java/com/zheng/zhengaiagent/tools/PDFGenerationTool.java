@@ -42,8 +42,6 @@ public class PDFGenerationTool {
         String fileDir = FileConstant.FILE_SAVE_DIR + "/pdf";
         String filePath = fileDir + "/" + fileName;
         String urlPath;
-        System.out.println(aliOSSUtil);
-        aliOSSUtil = new AliOSSUtil("https://oss-cn-hangzhou.aliyuncs.com", "LTAI5t6Yxfn6u2az6xpUGqJu", "ZafmIIfoozoggb8erlxPjGAQyqPUWo", "sky-itcast-jiajun");
         try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
             // 1. 创建PDF到内存流
             try (PdfWriter writer = new PdfWriter(baos);
